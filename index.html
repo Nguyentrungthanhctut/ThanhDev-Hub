@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>Dashboard | Nguyễn Trung Thành - ThanhDev Hub</title>
     <link rel="icon" type="image/jpeg" href="logo.jpg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -22,6 +22,7 @@
             transition: background 0.4s ease, color 0.4s ease;
         }
         body.light-theme { background: #f0fdf4; color: #1e293b; }
+        body.gate-locked { overflow: hidden; height: 100vh; }
 
         /* Nền Matrix tối ưu GPU */
         #matrix-canvas {
@@ -39,16 +40,203 @@
         ::-webkit-scrollbar-thumb { background: rgba(0, 255, 65, 0.4); border-radius: 10px; }
         body.light-theme ::-webkit-scrollbar-thumb { background: rgba(5, 150, 105, 0.4); }
 
+        /* ================= WELCOME BIO & LOADING SCREEN ================= */
+        #intro-gate {
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            background: rgba(2, 8, 4, 0.92);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 18px;
+            transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1), transform 0.65s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.65s;
+        }
+        body.light-theme #intro-gate {
+            background: rgba(240, 253, 244, 0.94);
+        }
+        #intro-gate.hidden {
+            opacity: 0;
+            transform: scale(1.06);
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .intro-card {
+            width: 100%;
+            max-width: 460px;
+            background: rgba(8, 20, 13, 0.88);
+            border: 1px solid rgba(0, 255, 65, 0.45);
+            border-radius: 26px;
+            padding: 32px 26px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), 0 0 30px rgba(0, 255, 65, 0.18);
+            position: relative;
+            overflow: hidden;
+        }
+        body.light-theme .intro-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-color: rgba(5, 150, 105, 0.4);
+            box-shadow: 0 20px 45px rgba(5, 150, 105, 0.18);
+        }
+
+        .intro-logo {
+            width: 92px;
+            height: 92px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #00ff41;
+            box-shadow: 0 0 22px rgba(0, 255, 65, 0.5);
+            margin-bottom: 14px;
+            animation: floatLogo 3s ease-in-out infinite;
+        }
+        body.light-theme .intro-logo { border-color: #059669; box-shadow: 0 0 18px rgba(5, 150, 105, 0.35); }
+
+        @keyframes floatLogo {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        .intro-badge {
+            display: inline-block;
+            font-family: monospace;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+            background: rgba(0, 255, 65, 0.14);
+            border: 1px solid rgba(0, 255, 65, 0.35);
+            color: #00ff41;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+        body.light-theme .intro-badge { color: #059669; background: rgba(5, 150, 105, 0.12); border-color: rgba(5, 150, 105, 0.35); }
+
+        .intro-title {
+            font-size: 1.55rem;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+        .intro-subtitle {
+            font-size: 0.85rem;
+            opacity: 0.85;
+            line-height: 1.55;
+            margin-bottom: 18px;
+        }
+
+        /* Giai đoạn 1: Thanh Loading */
+        #loading-stage {
+            transition: opacity 0.35s ease;
+        }
+        .loader-bar-wrap {
+            width: 100%;
+            height: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 255, 65, 0.35);
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        body.light-theme .loader-bar-wrap { background: rgba(5, 150, 105, 0.12); border-color: rgba(5, 150, 105, 0.35); }
+        .loader-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #00b09b, #00ff41);
+            box-shadow: 0 0 12px #00ff41;
+            border-radius: 20px;
+            transition: width 0.12s linear;
+        }
+        body.light-theme .loader-bar-fill { background: linear-gradient(90deg, #059669, #10b981); }
+
+        .loader-status-row {
+            display: flex;
+            justify-content: space-between;
+            font-family: monospace;
+            font-size: 0.75rem;
+            color: #00ff41;
+        }
+        body.light-theme .loader-status-row { color: #059669; }
+
+        /* Giai đoạn 2: Bio Intro & Nút Bắt đầu */
+        #welcome-stage {
+            display: none;
+            animation: fadeUpIntro 0.45s ease forwards;
+        }
+        @keyframes fadeUpIntro {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .intro-features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .intro-feat-item {
+            background: rgba(0, 255, 65, 0.07);
+            border: 1px solid rgba(0, 255, 65, 0.22);
+            border-radius: 12px;
+            padding: 8px 10px;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+        body.light-theme .intro-feat-item { background: rgba(5, 150, 105, 0.08); border-color: rgba(5, 150, 105, 0.22); }
+        .intro-feat-item i { color: #00ff41; font-size: 0.85rem; }
+        body.light-theme .intro-feat-item i { color: #059669; }
+
+        .enter-hub-btn {
+            width: 100%;
+            padding: 13px 20px;
+            border-radius: 30px;
+            border: none;
+            background: linear-gradient(45deg, #00b09b, #00ff41);
+            color: #000;
+            font-size: 0.95rem;
+            font-weight: 800;
+            cursor: pointer;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            gap: 9px;
+            box-shadow: 0 6px 22px rgba(0, 255, 65, 0.45);
+            transition: transform 0.2s, box-shadow 0.2s;
+            letter-spacing: 0.3px;
+        }
+        .enter-hub-btn:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 10px 28px rgba(0, 255, 65, 0.65);
+        }
+        .enter-hub-btn:active { transform: scale(0.98); }
+        .intro-hint {
+            margin-top: 10px;
+            font-size: 0.7rem;
+            opacity: 0.68;
+            font-family: monospace;
+        }
+
         /* ================= 3-COLUMN SYMMETRIC DASHBOARD LAYOUT ================= */
         .dashboard-grid {
             position: relative;
             z-index: 1;
             display: grid;
-            grid-template-columns: minmax(300px, 1fr) minmax(380px, 450px) minmax(300px, 1fr);
+            grid-template-columns: minmax(290px, 1fr) minmax(370px, 440px) minmax(290px, 1fr);
             gap: 18px;
             width: 100%;
-            max-width: 1340px;
+            max-width: 1360px;
             align-items: start;
+            opacity: 0;
+            transform: translateY(14px);
+            transition: opacity 0.6s ease 0.15s, transform 0.6s ease 0.15s;
+        }
+        .dashboard-grid.entered {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .side-column {
@@ -64,30 +252,46 @@
             min-width: 0;
         }
 
+        /* Tablet & Laptop màn hình nhỏ */
         @media (max-width: 1120px) {
-            body { align-items: flex-start; }
+            body { align-items: flex-start; padding: 18px 14px; }
             .dashboard-grid {
                 grid-template-columns: 1fr 1fr;
-                max-width: 840px;
+                max-width: 860px;
+                gap: 16px;
             }
             #center-column {
                 grid-column: 1 / -1;
                 position: static;
-                max-width: 480px;
+                max-width: 500px;
                 width: 100%;
                 margin: 0 auto;
                 order: -1;
             }
         }
 
+        /* Điện thoại (Mobile Responsive tối ưu) */
         @media (max-width: 767px) {
-            body { padding: 12px 10px; }
+            body { padding: 12px 10px 24px; }
             .dashboard-grid {
                 grid-template-columns: 1fr;
-                max-width: 480px;
+                max-width: 100%;
                 gap: 14px;
             }
+            #center-column { max-width: 100%; }
             .side-column { gap: 14px; }
+            .glass-panel { padding: 14px 12px; border-radius: 18px; }
+            .profile-card { padding: 48px 16px 20px; border-radius: 22px; }
+            .name { font-size: 1.42rem; }
+            .bio { font-size: 0.82rem; }
+            .info-row { font-size: 0.74rem; padding: 6px 10px; gap: 6px; }
+            .intro-card { padding: 26px 18px; border-radius: 22px; }
+            .intro-title { font-size: 1.35rem; }
+            .intro-features { grid-template-columns: 1fr; gap: 7px; }
+            .mini-btn, .tiny-copy-btn, .pomo-btn { min-height: 30px; }
+            /* Tránh iOS tự động zoom khi focus vào input */
+            input[type="text"], input[type="number"], textarea { font-size: 16px !important; }
+            #cli-input { font-size: 14px !important; }
         }
 
         /* Glass Panel tối ưu tốc độ render */
@@ -149,7 +353,6 @@
         body.light-theme .mini-btn:hover { background: #059669; color: #fff; }
 
         /* ================= LEFT COLUMN WIDGETS ================= */
-        /* 1. Live Web Showcase */
         .web-list {
             height: 138px;
             overflow-y: auto;
@@ -175,7 +378,6 @@
         .web-card-title { font-size: 0.8rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .web-card-url { font-size: 0.68rem; opacity: 0.72; font-family: monospace; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
 
-        /* 2. Interactive Terminal CLI v3.0 */
         .terminal-box {
             background: rgba(2, 8, 4, 0.95);
             border: 1px solid rgba(0, 255, 65, 0.35);
@@ -234,14 +436,13 @@
             color: #00ff41;
             font-family: monospace;
             font-size: 0.67rem;
-            padding: 2px 6px;
+            padding: 3px 7px;
             border-radius: 6px;
             cursor: pointer;
             transition: 0.18s;
         }
         .cli-chip:hover { background: #00ff41; color: #000; }
 
-        /* 3. Dev Utilities & Multi-Device Synced Clone Gmail */
         .dev-tool-group { display: flex; flex-direction: column; gap: 8px; }
         .dev-input-row { display: flex; gap: 6px; }
         .dev-input {
@@ -272,9 +473,10 @@
             gap: 5px;
             margin-bottom: 7px;
             font-size: 0.73rem;
+            flex-wrap: wrap;
         }
         .clone-count-input {
-            width: 46px;
+            width: 48px;
             background: rgba(0, 0, 0, 0.45);
             border: 1px solid rgba(0, 255, 65, 0.35);
             border-radius: 8px;
@@ -346,7 +548,7 @@
             background: rgba(0, 255, 65, 0.14);
             border: 1px solid rgba(0, 255, 65, 0.32);
             color: inherit;
-            padding: 3px 5px;
+            padding: 3px 6px;
             border-radius: 6px;
             font-size: 0.64rem;
             font-weight: 700;
@@ -382,7 +584,7 @@
         .tools-right { position: absolute; top: 16px; right: 16px; display: flex; gap: 7px; transform: translateZ(20px); }
         .icon-btn {
             background: rgba(0, 255, 65, 0.12); border: 1px solid rgba(0, 255, 65, 0.3);
-            color: inherit; width: 33px; height: 33px; border-radius: 50%;
+            color: inherit; width: 34px; height: 34px; border-radius: 50%;
             cursor: pointer; font-weight: bold; font-size: 0.78rem; transition: 0.25s;
             display: flex; justify-content: center; align-items: center;
         }
@@ -441,15 +643,15 @@
         .progress-container { display: flex; align-items: center; gap: 7px; font-size: 0.7rem; margin-bottom: 9px; font-family: monospace; }
         input[type=range] { flex: 1; -webkit-appearance: none; background: transparent; height: 6px; cursor: pointer; }
         input[type=range]::-webkit-slider-runnable-track { background: rgba(128,128,128,0.3); border-radius: 10px; height: 5px; }
-        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; background: #00ff41; border-radius: 50%; margin-top: -3.5px; box-shadow: 0 0 8px #00ff41; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 13px; height: 13px; background: #00ff41; border-radius: 50%; margin-top: -4px; box-shadow: 0 0 8px #00ff41; }
         body.light-theme input[type=range]::-webkit-slider-thumb { background: #059669; box-shadow: 0 0 8px #059669; }
 
         .music-controls { display: flex; justify-content: center; align-items: center; gap: 11px; }
-        .ctrl-btn { background: rgba(0, 255, 65, 0.1); border: 1px solid rgba(0, 255, 65, 0.3); color: inherit; width: 34px; height: 34px; border-radius: 50%; cursor: pointer; transition: 0.2s; font-size: 0.82rem; }
+        .ctrl-btn { background: rgba(0, 255, 65, 0.1); border: 1px solid rgba(0, 255, 65, 0.3); color: inherit; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; transition: 0.2s; font-size: 0.82rem; }
         .ctrl-btn:hover, .ctrl-btn.active { background: rgba(0, 255, 65, 0.35); transform: scale(1.08); border-color: #00ff41; }
         body.light-theme .ctrl-btn:hover, body.light-theme .ctrl-btn.active { background: #059669; color: #fff; border-color: #059669; }
 
-        .play-btn { width: 44px; height: 44px; font-size: 1.05rem; background: linear-gradient(45deg, #00b09b, #00ff41); color: #000; box-shadow: 0 4px 14px rgba(0, 255, 65, 0.4); border: none; border-radius: 50%; cursor: pointer; transition: 0.25s; }
+        .play-btn { width: 46px; height: 46px; font-size: 1.05rem; background: linear-gradient(45deg, #00b09b, #00ff41); color: #000; box-shadow: 0 4px 14px rgba(0, 255, 65, 0.4); border: none; border-radius: 50%; cursor: pointer; transition: 0.25s; }
         .play-btn:hover { transform: scale(1.08); }
 
         .volume-box { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 9px; padding-top: 7px; border-top: 1px solid rgba(0, 255, 65, 0.15); }
@@ -486,15 +688,14 @@
         body.light-theme .sys-val { color: #059669; }
         .sys-lbl { font-size: 0.65rem; opacity: 0.78; margin-top: 2px; }
 
-        .social-links { display: flex; justify-content: center; gap: 11px; margin-bottom: 14px; transform: translateZ(20px); }
-        .social-links a { color: inherit; font-size: 1.15rem; width: 38px; height: 38px; display: flex; justify-content: center; align-items: center; background: rgba(0, 255, 65, 0.08); border-radius: 50%; text-decoration: none; transition: 0.25s; border: 1px solid rgba(0, 255, 65, 0.25); }
+        .social-links { display: flex; justify-content: center; gap: 11px; margin-bottom: 14px; transform: translateZ(20px); flex-wrap: wrap; }
+        .social-links a { color: inherit; font-size: 1.15rem; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; background: rgba(0, 255, 65, 0.08); border-radius: 50%; text-decoration: none; transition: 0.25s; border: 1px solid rgba(0, 255, 65, 0.25); }
         .social-links a:hover { transform: translateY(-3px); background: #00ff41; color: #000; box-shadow: 0 5px 14px rgba(0,255,65,0.4); }
         body.light-theme .social-links a:hover { background: #059669; color: #fff; }
 
         .copyright { font-size: 0.72rem; opacity: 0.65; }
 
         /* ================= RIGHT COLUMN WIDGETS ================= */
-        /* 1. Pomodoro Timer (Custom Time + Loud Extended Bell) */
         .pomo-display {
             text-align: center;
             background: rgba(0, 0, 0, 0.38);
@@ -516,7 +717,7 @@
         .pomo-mode-tabs { display: flex; justify-content: center; gap: 6px; margin-bottom: 6px; }
         .pomo-tab {
             background: transparent; border: 1px solid rgba(0, 255, 65, 0.3); color: inherit;
-            padding: 3px 10px; border-radius: 10px; font-size: 0.71rem; cursor: pointer; transition: 0.2s;
+            padding: 4px 11px; border-radius: 10px; font-size: 0.71rem; cursor: pointer; transition: 0.2s;
         }
         .pomo-tab.active { background: #00ff41; color: #000; font-weight: bold; }
         body.light-theme .pomo-tab.active { background: #059669; color: #fff; border-color: #059669; }
@@ -535,7 +736,7 @@
         }
         .pomo-custom-row label { display: flex; align-items: center; gap: 4px; opacity: 0.9; }
         .pomo-num-input {
-            width: 45px;
+            width: 48px;
             background: rgba(0, 0, 0, 0.45);
             border: 1px solid rgba(0, 255, 65, 0.35);
             border-radius: 8px;
@@ -550,7 +751,7 @@
         body.light-theme .pomo-num-input { background: #ffffff; border-color: rgba(5, 150, 105, 0.35); }
         .pomo-actions { display: flex; justify-content: center; gap: 7px; flex-wrap: wrap; }
         .pomo-btn {
-            padding: 5px 13px; border-radius: 18px; border: 1px solid rgba(0, 255, 65, 0.4);
+            padding: 6px 14px; border-radius: 18px; border: 1px solid rgba(0, 255, 65, 0.4);
             background: rgba(0, 255, 65, 0.15); color: inherit; font-weight: bold;
             font-size: 0.75rem; cursor: pointer; transition: 0.2s;
         }
@@ -558,7 +759,6 @@
         .pomo-btn.stop-ring { background: #ef4444; color: #fff; border: none; display: none; }
         .pomo-btn:hover { transform: scale(1.04); }
 
-        /* 2. Real-time Access History Log */
         .history-list {
             height: 135px;
             overflow-y: auto;
@@ -583,12 +783,11 @@
         body.light-theme .history-top a, body.light-theme .history-top span.hist-title { color: #059669; }
         .history-time { font-size: 0.64rem; opacity: 0.72; font-family: monospace; white-space: nowrap; }
 
-        /* 3. Interactive Calendar + Day Notes */
         .cal-header { display: flex; justify-content: space-between; align-items: center; font-size: 0.77rem; font-weight: 700; margin-bottom: 7px; }
         .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; text-align: center; font-size: 0.7rem; }
         .cal-day-name { font-weight: 700; opacity: 0.65; padding-bottom: 2px; }
         .cal-cell {
-            padding: 5px 0;
+            padding: 6px 0;
             border-radius: 7px;
             background: rgba(0, 0, 0, 0.25);
             cursor: pointer;
@@ -632,7 +831,7 @@
         body.light-theme .cal-note-title { color: #0284c7; }
         #cal-day-note-input {
             width: 100%;
-            height: 52px;
+            height: 54px;
             background: rgba(0, 0, 0, 0.4);
             border: 1px solid rgba(56, 189, 248, 0.35);
             border-radius: 9px;
@@ -644,7 +843,6 @@
         }
         body.light-theme #cal-day-note-input { background: rgba(255, 255, 255, 0.9); }
 
-        /* 4. Quick Notes */
         #quick-notes {
             width: 100%;
             height: 76px;
@@ -679,16 +877,57 @@
         .repo-item p { font-size: 0.84rem; opacity: 0.85; margin-top: 5px; }
         .badge-lang { display: inline-block; background: rgba(0,255,65,0.15); padding: 2px 8px; border-radius: 12px; font-size: 0.72rem; margin-right: 8px; }
 
-        #toast { position: fixed; bottom: -60px; left: 50%; transform: translateX(-50%); background: #00ff41; color: #000; padding: 9px 20px; border-radius: 25px; font-weight: bold; font-size: 0.82rem; transition: 0.25s; z-index: 1000; opacity: 0; box-shadow: 0 5px 15px rgba(0,0,0,0.4); white-space: nowrap; }
+        #toast { position: fixed; bottom: -60px; left: 50%; transform: translateX(-50%); background: #00ff41; color: #000; padding: 9px 20px; border-radius: 25px; font-weight: bold; font-size: 0.82rem; transition: 0.25s; z-index: 2500; opacity: 0; box-shadow: 0 5px 15px rgba(0,0,0,0.4); white-space: nowrap; }
         body.light-theme #toast { background: #059669; color: #fff; }
     </style>
 </head>
-<body>
+<body class="gate-locked">
     <!-- Nền Matrix -->
     <canvas id="matrix-canvas"></canvas>
 
+    <!-- ================= MÀN HÌNH LOADING & BIO INTRO GATE ================= -->
+    <div id="intro-gate">
+        <div class="intro-card">
+            <img src="logo.jpg" alt="ThanhDev Hub" class="intro-logo" onerror="this.src='https://ui-avatars.com/api/?name=ThanhDev+Hub&background=0a140e&color=00ff41&size=140'">
+            <div class="intro-badge"><i class="fas fa-shield-halved"></i> THANHDEV HUB • OS v3.0</div>
+            <h1 class="intro-title">Nguyễn Trung Thành</h1>
+
+            <!-- Giai đoạn 1: Đang tải hệ thống -->
+            <div id="loading-stage">
+                <p class="intro-subtitle" style="margin-bottom: 14px;">Đang khởi tạo không gian làm việc, đồng bộ dữ liệu và tối ưu giao diện thiết bị...</p>
+                <div class="loader-bar-wrap">
+                    <div class="loader-bar-fill" id="loader-fill"></div>
+                </div>
+                <div class="loader-status-row">
+                    <span id="loader-text">Initializing Matrix Engine...</span>
+                    <span id="loader-percent">0%</span>
+                </div>
+            </div>
+
+            <!-- Giai đoạn 2: Giới thiệu Bio & Nút bắt đầu -->
+            <div id="welcome-stage">
+                <p class="intro-subtitle">
+                    Chào mừng bạn đến với <strong>ThanhDev Hub</strong> — trang Bio &amp; Dashboard cá nhân tích hợp bộ công cụ lập trình, học tập và quản lý tiện ích đa thiết bị.
+                </p>
+
+                <div class="intro-features">
+                    <div class="intro-feat-item"><i class="fas fa-terminal"></i> <span>Terminal OS &amp; Dev Tools</span></div>
+                    <div class="intro-feat-item"><i class="fas fa-music"></i> <span>Music Visualizer Pro</span></div>
+                    <div class="intro-feat-item"><i class="fas fa-stopwatch"></i> <span>Pomodoro &amp; Lịch Ghi Chú</span></div>
+                    <div class="intro-feat-item"><i class="fas fa-cloud"></i> <span>Cloud Sync Đa Thiết Bị</span></div>
+                </div>
+
+                <button class="enter-hub-btn" id="enter-hub-btn" onclick="enterDashboard()">
+                    <span>Bắt đầu vào Web</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+                <div class="intro-hint">Nhấn nút hoặc phím [Enter] để truy cập</div>
+            </div>
+        </div>
+    </div>
+
     <!-- ================= 3-COLUMN SYMMETRIC DASHBOARD ================= -->
-    <div class="dashboard-grid">
+    <div class="dashboard-grid" id="main-dashboard">
 
         <!-- ==================== KHUNG TRÁI ==================== -->
         <aside class="side-column" id="left-column">
@@ -779,6 +1018,7 @@
                     <div class="tools-left">
                         <button class="icon-btn" onclick="showQR()" title="QR Profile"><i class="fas fa-qrcode"></i></button>
                         <button class="icon-btn" onclick="copyURL()" title="Copy Link"><i class="fas fa-share-alt"></i></button>
+                        <button class="icon-btn" onclick="reopenIntroGate()" title="Xem lại Bio Intro"><i class="fas fa-id-card"></i></button>
                     </div>
                     <div class="tools-right">
                         <button class="icon-btn" id="lang-btn" onclick="toggleLang()" title="Switch Language">EN</button>
@@ -872,7 +1112,7 @@
 
         <!-- ==================== KHUNG PHẢI ==================== -->
         <aside class="side-column" id="right-column">
-            <!-- 1. Pomodoro Focus (Chuông nhiều hồi, to & kéo dài) -->
+            <!-- 1. Pomodoro Focus -->
             <div class="glass-panel">
                 <div class="panel-header">
                     <span><i class="fas fa-stopwatch"></i> Pomodoro Focus</span>
@@ -928,7 +1168,6 @@
                 </div>
                 <div class="cal-grid" id="mini-calendar-grid"></div>
 
-                <!-- Khung nhập ghi chú cho ngày đang chọn trên lịch -->
                 <div class="cal-note-editor">
                     <div class="cal-note-title">
                         <span id="selected-cal-date-label"><i class="fas fa-pen"></i> Ghi chú ngày hôm nay</span>
@@ -987,6 +1226,76 @@
     <div id="toast">Đã copy thành công!</div>
 
     <script>
+        /* ================= PRELOADER & BIO INTRO GATE ================= */
+        let isIntroReady = false;
+        let isDashboardEntered = false;
+
+        function runPreloader() {
+            const fill = document.getElementById('loader-fill');
+            const pctText = document.getElementById('loader-percent');
+            const statusText = document.getElementById('loader-text');
+            const steps = [
+                { p: 20, msg: 'Loading Matrix Engine...' },
+                { p: 48, msg: 'Connecting GitHub & Weather API...' },
+                { p: 76, msg: 'Syncing Cloud Workspace...' },
+                { p: 100, msg: 'System Ready!' }
+            ];
+
+            let progress = 0;
+            const timer = setInterval(() => {
+                progress += Math.floor(Math.random() * 8) + 5;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(timer);
+                    fill.style.width = '100%';
+                    pctText.innerText = '100%';
+                    statusText.innerText = 'System Ready!';
+
+                    setTimeout(() => {
+                        document.getElementById('loading-stage').style.display = 'none';
+                        document.getElementById('welcome-stage').style.display = 'block';
+                        isIntroReady = true;
+                    }, 300);
+                    return;
+                }
+
+                fill.style.width = progress + '%';
+                pctText.innerText = progress + '%';
+                const currentStep = steps.find(s => progress <= s.p);
+                if (currentStep) statusText.innerText = currentStep.msg;
+            }, 65);
+        }
+
+        function enterDashboard() {
+            isDashboardEntered = true;
+            document.getElementById('intro-gate').classList.add('hidden');
+            document.body.classList.remove('gate-locked');
+            document.getElementById('main-dashboard').classList.add('entered');
+
+            // Khởi tạo AudioContext ngay khi người dùng bấm nút Bắt đầu để tránh bị trình duyệt chặn âm thanh
+            if (!isAudioInit) initAudioAPI();
+            if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+            trackUserAction('Bắt đầu truy cập ThanhDev Hub', '#enter');
+        }
+
+        function reopenIntroGate() {
+            isDashboardEntered = false;
+            document.getElementById('loading-stage').style.display = 'none';
+            document.getElementById('welcome-stage').style.display = 'block';
+            isIntroReady = true;
+            document.getElementById('intro-gate').classList.remove('hidden');
+            document.body.classList.add('gate-locked');
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && isIntroReady && !isDashboardEntered) {
+                e.preventDefault();
+                enterDashboard();
+            }
+        });
+
+        runPreloader();
+
         /* ================= 0. TỰ ĐỘNG LẬT AVATAR & LOGO.JPG ================= */
         const avatarFlipBox = document.getElementById('avatar-flip-box');
         let autoFlipTimer;
@@ -1013,7 +1322,6 @@
         let columns, drops;
         let matrixPaused = false;
 
-        // Các mức giới hạn FPS: 0 nghĩa là MAX (Uncapped - chạy tối đa tần số quét màn hình)
         const fpsModes = [0, 60, 120, 144];
         let fpsModeIdx = 0;
         let targetFps = fpsModes[fpsModeIdx];
@@ -1051,7 +1359,6 @@
                 return;
             }
 
-            // Nếu targetFps > 0 thì giới hạn theo mốc đó, nếu targetFps === 0 thì chạy tối đa (Uncapped)
             if (targetFps > 0) {
                 const minInterval = 1000 / targetFps;
                 if (timestamp - lastRenderTime < minInterval) return;
@@ -1081,7 +1388,7 @@
         }
         requestAnimationFrame(drawMatrix);
 
-        /* ================= 2. HIỆU ỨNG TILT 3D MƯỢT ================= */
+        /* ================= 2. HIỆU ỨNG TILT 3D MƯỢT (CHỈ TRÊN DESKTOP CÓ CHUỘT) ================= */
         if (window.matchMedia("(pointer: fine)").matches) {
             const container = document.getElementById('tilt-container');
             const card = document.getElementById('profile-card');
@@ -1107,7 +1414,7 @@
         let lang = 'vi';
         const i18n = {
             vi: {
-                roles: ["> Sinh viên Khoa học Máy tính - CTUET_", "> Web Developer (HTML/CSS/JS)_", "> AI & Crypto Enthusiast_"],
+                roles: ["> Sinh viên Khoa học Máy tính - CTUT_", "> Web Developer (HTML/CSS/JS)_", "> AI & Crypto Enthusiast_"],
                 location: "Cần Thơ, VN",
                 docBtn: "Tài Liệu Đen",
                 gitBtn: "Dự Án GitHub",
@@ -1118,7 +1425,7 @@
                 toastCopy: "Đã copy vào bộ nhớ tạm!"
             },
             en: {
-                roles: ["> Computer Science Student - CTUET_", "> Web Developer (HTML/CSS/JS)_", "> AI & Crypto Enthusiast_"],
+                roles: ["> Computer Science Student - CTUT_", "> Web Developer (HTML/CSS/JS)_", "> AI & Crypto Enthusiast_"],
                 location: "Can Tho, VN",
                 docBtn: "Black Docs",
                 gitBtn: "GitHub Repos",
@@ -1268,8 +1575,7 @@
         }
         genStrongPass();
 
-        // Hệ thống lưu & đồng bộ danh sách Gmail Clone + trạng thái ĐÃ DÙNG giữa mọi thiết bị/người truy cập
-        const CLOUD_SYNC_URL = 'https://api.npoint.io/7b8c9d2e4f1a6c3b5e90'; // Kho lưu trữ JSON đồng bộ dùng chung
+        const CLOUD_SYNC_URL = 'https://api.npoint.io/7b8c9d2e4f1a6c3b5e90';
         const LOCAL_CLONE_KEY = 'thanhdev_shared_clone_pool_v1';
         let sharedClonePool = [];
 
@@ -1315,7 +1621,7 @@
                         return;
                     }
                 }
-            } catch (e) { /* Fallback sang localStorage nếu mất mạng */ }
+            } catch (e) {}
 
             const cached = JSON.parse(localStorage.getItem(LOCAL_CLONE_KEY) || '[]');
             if (cached.length > 0) {
@@ -1439,7 +1745,6 @@
             showToast(`Đã copy & đánh dấu ${unused.length} acc chưa dùng!`);
         }
 
-        // Khởi chạy đồng bộ khi mở trang & tự cập nhật mỗi 6 giây để nhận thay đổi từ thiết bị/người khác
         pullSharedClonePool();
         setInterval(pullSharedClonePool, 6000);
         window.addEventListener('storage', (e) => {
@@ -1449,7 +1754,7 @@
             }
         });
 
-        /* ================= 7. THANHDEV TERMINAL v3.0 (NHIỀU CÔNG CỤ GIÁ TRỊ) ================= */
+        /* ================= 7. THANHDEV TERMINAL v3.0 ================= */
         const cliInput = document.getElementById('cli-input');
         const cliOutput = document.getElementById('cli-output');
         let cliHistory = [];
@@ -1513,10 +1818,10 @@
                 case 'readme':
                     printCli(`<div class="cli-card">
                         <b>📖 HƯỚNG DẪN NHANH THANHDEV HUB v3.0:</b><br>
-                        • <b>Mail Clone Sync:</b> Bấm Mail/Cả 2 hoặc tick ✓ để đánh dấu <i>ĐÃ DÙNG</i> đồng bộ trên mọi thiết bị.<br>
-                        • <b>Vượt FPS:</b> Bấm vào ô FPS ở thẻ giữa hoặc gõ <code>fps max</code> để mở khóa 120/144/Uncapped FPS.<br>
-                        • <b>Lịch & Ghi chú:</b> Bấm vào ngày bất kỳ trên lịch để lưu deadline riêng cho ngày đó.<br>
-                        • <b>Pomodoro:</b> Nhập số phút tự do, chuông báo thức sẽ reo 3 hồi to & kéo dài.
+                        - <b>Mail Clone Sync:</b> Bấm Mail/Cả 2 hoặc tick ✓ để đánh dấu <i>ĐÃ DÙNG</i> đồng bộ trên mọi thiết bị.<br>
+                        - <b>Vượt FPS:</b> Bấm vào ô FPS ở thẻ giữa hoặc gõ <code>fps max</code> để mở khóa 120/144/Uncapped FPS.<br>
+                        - <b>Lịch & Ghi chú:</b> Bấm vào ngày bất kỳ trên lịch để lưu deadline riêng cho ngày đó.<br>
+                        - <b>Pomodoro:</b> Nhập số phút tự do, chuông báo thức sẽ reo 3 hồi to & kéo dài.
                     </div>`);
                     break;
 
@@ -1672,7 +1977,8 @@
 
                 canvasVis = document.getElementById('visualizer');
                 ctxVis = canvasVis.getContext('2d');
-                canvasVis.width = canvasVis.offsetWidth; canvasVis.height = canvasVis.offsetHeight;
+                canvasVis.width = canvasVis.offsetWidth || 320;
+                canvasVis.height = canvasVis.offsetHeight || 34;
 
                 function drawVis() {
                     requestAnimationFrame(drawVis);
@@ -1750,6 +2056,7 @@
         }
 
         document.addEventListener('keydown', (e) => {
+            if (!isDashboardEntered) return;
             const tag = document.activeElement.tagName;
             if (e.code === 'Space' && tag !== 'BUTTON' && tag !== 'INPUT' && tag !== 'TEXTAREA') {
                 e.preventDefault();
@@ -1757,7 +2064,7 @@
             }
         });
 
-        /* ================= 10. POMODORO FOCUS (CHUÔNG NHIỀU HỒI, TO & KÉO DÀI) ================= */
+        /* ================= 10. POMODORO FOCUS ================= */
         let pomoMode = 'focus';
         let customFocusMin = parseInt(localStorage.getItem('thanhdev_pomo_focus') || '25', 10);
         let customBreakMin = parseInt(localStorage.getItem('thanhdev_pomo_break') || '5', 10);
@@ -1777,7 +2084,6 @@
             return `${m}:${s}`;
         }
 
-        // Phát 1 chuỗi chuông kép vang to & ngân dài
         function triggerSingleBellBurst() {
             try {
                 const BellCtx = window.AudioContext || window.webkitAudioContext;
@@ -1787,12 +2093,11 @@
                 if (activeAlarmCtx.state === 'suspended') activeAlarmCtx.resume();
 
                 const now = activeAlarmCtx.currentTime;
-                // 4 tiếng "TING - TING - TING - TONG" âm lượng cao, ngân vang 1.4s mỗi tiếng
                 const pattern = [
-                    { delay: 0.0, freq: 1567.98 }, // G6
-                    { delay: 0.28, freq: 2093.00 }, // C7
-                    { delay: 0.56, freq: 1567.98 }, // G6
-                    { delay: 0.84, freq: 2093.00 }  // C7
+                    { delay: 0.0, freq: 1567.98 },
+                    { delay: 0.28, freq: 2093.00 },
+                    { delay: 0.56, freq: 1567.98 },
+                    { delay: 0.84, freq: 2093.00 }
                 ];
 
                 pattern.forEach(note => {
@@ -1806,8 +2111,8 @@
                     oscHarmonic.frequency.setValueAtTime(note.freq * 2, now + note.delay);
 
                     gain.gain.setValueAtTime(0.001, now + note.delay);
-                    gain.gain.exponentialRampToValueAtTime(0.85, now + note.delay + 0.02); // Âm lượng lớn
-                    gain.gain.exponentialRampToValueAtTime(0.0001, now + note.delay + 1.45); // Ngân dài
+                    gain.gain.exponentialRampToValueAtTime(0.85, now + note.delay + 0.02);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, now + note.delay + 1.45);
 
                     osc.connect(gain);
                     oscHarmonic.connect(gain);
@@ -1821,7 +2126,6 @@
             } catch (e) {}
         }
 
-        // Kéo dài báo thức thành 3 hồi liên tiếp (~5 giây) cho đến khi hết hoặc bấm Tắt chuông
         function playExtendedAlarmBell() {
             stopAlarmBell();
             const pomoBox = document.getElementById('pomo-box');
@@ -1922,7 +2226,6 @@
         function trackUserAction(title, url = '') {
             const now = new Date();
             const timeStr = `${now.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit' })} • ${now.toLocaleDateString('vi-VN')}`;
-            // Tránh ghi trùng lặp liên tiếp cùng 1 mục trong vòng 2 giây
             if (accessHistory.length > 0 && accessHistory[0].title === title && accessHistory[0].time === timeStr) return;
 
             accessHistory.unshift({ title, url, time: timeStr });
@@ -1961,7 +2264,6 @@
             showToast("Đã xóa lịch sử truy cập!");
         }
 
-        // Bắt tự động MỌI click vào link (<a>) ở bất kỳ đâu trên trang web (kể cả link động từ GitHub API)
         document.addEventListener('click', (e) => {
             const anchor = e.target.closest('a');
             if (anchor && anchor.href) {
@@ -1970,7 +2272,6 @@
             }
         });
 
-        // Đồng bộ lịch sử tức thì nếu mở nhiều tab
         window.addEventListener('storage', (e) => {
             if (e.key === 'thanhdev_access_history' && e.newValue) {
                 accessHistory = JSON.parse(e.newValue);
@@ -1978,7 +2279,7 @@
             }
         });
 
-        trackUserAction('Vào ThanhDev Hub Dashboard', window.location.href);
+        renderAccessHistory();
 
         /* ================= 12. LỊCH THÁNG TƯƠNG TÁC & GHI CHÚ THEO TỪNG NGÀY ================= */
         let calDate = new Date();
