@@ -14,11 +14,11 @@
             color: #ffffff;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
-            padding: 20px 16px;
+            padding: 20px 16px 32px;
             transition: background 0.4s ease, color 0.4s ease;
         }
         body.light-theme { background: #f0fdf4; color: #1e293b; }
@@ -54,9 +54,7 @@
             padding: 18px;
             transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1), transform 0.65s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.65s;
         }
-        body.light-theme #intro-gate {
-            background: rgba(240, 253, 244, 0.94);
-        }
+        body.light-theme #intro-gate { background: rgba(240, 253, 244, 0.94); }
         #intro-gate.hidden {
             opacity: 0;
             transform: scale(1.06);
@@ -114,22 +112,9 @@
         }
         body.light-theme .intro-badge { color: #059669; background: rgba(5, 150, 105, 0.12); border-color: rgba(5, 150, 105, 0.35); }
 
-        .intro-title {
-            font-size: 1.55rem;
-            font-weight: 800;
-            margin-bottom: 6px;
-        }
-        .intro-subtitle {
-            font-size: 0.85rem;
-            opacity: 0.85;
-            line-height: 1.55;
-            margin-bottom: 18px;
-        }
+        .intro-title { font-size: 1.55rem; font-weight: 800; margin-bottom: 6px; }
+        .intro-subtitle { font-size: 0.85rem; opacity: 0.85; line-height: 1.55; margin-bottom: 18px; }
 
-        /* Giai đoạn 1: Thanh Loading */
-        #loading-stage {
-            transition: opacity 0.35s ease;
-        }
         .loader-bar-wrap {
             width: 100%;
             height: 10px;
@@ -159,11 +144,7 @@
         }
         body.light-theme .loader-status-row { color: #059669; }
 
-        /* Giai đoạn 2: Bio Intro & Nút Bắt đầu */
-        #welcome-stage {
-            display: none;
-            animation: fadeUpIntro 0.45s ease forwards;
-        }
+        #welcome-stage { display: none; animation: fadeUpIntro 0.45s ease forwards; }
         @keyframes fadeUpIntro {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -208,36 +189,25 @@
             transition: transform 0.2s, box-shadow 0.2s;
             letter-spacing: 0.3px;
         }
-        .enter-hub-btn:hover {
-            transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 10px 28px rgba(0, 255, 65, 0.65);
-        }
+        .enter-hub-btn:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 10px 28px rgba(0, 255, 65, 0.65); }
         .enter-hub-btn:active { transform: scale(0.98); }
-        .intro-hint {
-            margin-top: 10px;
-            font-size: 0.7rem;
-            opacity: 0.68;
-            font-family: monospace;
-        }
+        .intro-hint { margin-top: 10px; font-size: 0.7rem; opacity: 0.68; font-family: monospace; }
 
         /* ================= 3-COLUMN SYMMETRIC DASHBOARD LAYOUT ================= */
         .dashboard-grid {
             position: relative;
             z-index: 1;
             display: grid;
-            grid-template-columns: minmax(290px, 1fr) minmax(370px, 440px) minmax(290px, 1fr);
+            grid-template-columns: minmax(300px, 1fr) minmax(375px, 440px) minmax(300px, 1fr);
             gap: 18px;
             width: 100%;
-            max-width: 1360px;
+            max-width: 1380px;
             align-items: start;
             opacity: 0;
             transform: translateY(14px);
             transition: opacity 0.6s ease 0.15s, transform 0.6s ease 0.15s;
         }
-        .dashboard-grid.entered {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .dashboard-grid.entered { opacity: 1; transform: translateY(0); }
 
         .side-column {
             display: flex;
@@ -248,22 +218,25 @@
 
         #center-column {
             position: sticky;
-            top: 20px;
+            top: 18px;
             min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
         }
 
-        /* Tablet & Laptop màn hình nhỏ */
-        @media (max-width: 1120px) {
-            body { align-items: flex-start; padding: 18px 14px; }
+        /* Tablet & Laptop màn hình vừa */
+        @media (max-width: 1140px) {
+            body { padding: 18px 14px 28px; }
             .dashboard-grid {
                 grid-template-columns: 1fr 1fr;
-                max-width: 860px;
+                max-width: 880px;
                 gap: 16px;
             }
             #center-column {
                 grid-column: 1 / -1;
                 position: static;
-                max-width: 500px;
+                max-width: 520px;
                 width: 100%;
                 margin: 0 auto;
                 order: -1;
@@ -272,7 +245,7 @@
 
         /* Điện thoại (Mobile Responsive tối ưu) */
         @media (max-width: 767px) {
-            body { padding: 12px 10px 24px; }
+            body { padding: 12px 10px 26px; }
             .dashboard-grid {
                 grid-template-columns: 1fr;
                 max-width: 100%;
@@ -289,12 +262,11 @@
             .intro-title { font-size: 1.35rem; }
             .intro-features { grid-template-columns: 1fr; gap: 7px; }
             .mini-btn, .tiny-copy-btn, .pomo-btn { min-height: 30px; }
-            /* Tránh iOS tự động zoom khi focus vào input */
             input[type="text"], input[type="number"], textarea { font-size: 16px !important; }
             #cli-input { font-size: 14px !important; }
         }
 
-        /* Glass Panel tối ưu tốc độ render */
+        /* Glass Panel */
         .glass-panel {
             background: rgba(8, 18, 12, 0.82);
             backdrop-filter: blur(12px);
@@ -327,10 +299,7 @@
             letter-spacing: 0.3px;
             gap: 6px;
         }
-        body.light-theme .panel-header {
-            color: #059669;
-            border-bottom-color: rgba(5, 150, 105, 0.2);
-        }
+        body.light-theme .panel-header { color: #059669; border-bottom-color: rgba(5, 150, 105, 0.2); }
 
         .mini-btn {
             background: rgba(0, 255, 65, 0.12);
@@ -354,7 +323,7 @@
 
         /* ================= LEFT COLUMN WIDGETS ================= */
         .web-list {
-            height: 138px;
+            height: 132px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
@@ -424,12 +393,7 @@
             font-family: 'Consolas', monospace;
             font-size: 0.74rem;
         }
-        .cli-chips {
-            display: flex;
-            gap: 4px;
-            flex-wrap: wrap;
-            margin-top: 7px;
-        }
+        .cli-chips { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 7px; }
         .cli-chip {
             background: rgba(0, 255, 65, 0.12);
             border: 1px solid rgba(0, 255, 65, 0.3);
@@ -461,10 +425,7 @@
         .dev-btn-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
         .dev-btn-row .mini-btn { justify-content: center; }
 
-        .clone-gen-box {
-            border-top: 1px dashed rgba(0, 255, 65, 0.28);
-            padding-top: 8px;
-        }
+        .clone-gen-box { border-top: 1px dashed rgba(0, 255, 65, 0.28); padding-top: 8px; }
         body.light-theme .clone-gen-box { border-top-color: rgba(5, 150, 105, 0.28); }
         .clone-controls {
             display: flex;
@@ -519,15 +480,8 @@
             transition: 0.2s;
         }
         body.light-theme .clone-item { background: rgba(240, 253, 244, 0.82); border-color: rgba(5, 150, 105, 0.24); }
-        .clone-item.used {
-            opacity: 0.58;
-            border-color: rgba(239, 68, 68, 0.45);
-            background: rgba(239, 68, 68, 0.08);
-        }
-        .clone-item.used .clone-email {
-            text-decoration: line-through;
-            color: #f87171;
-        }
+        .clone-item.used { opacity: 0.58; border-color: rgba(239, 68, 68, 0.45); background: rgba(239, 68, 68, 0.08); }
+        .clone-item.used .clone-email { text-decoration: line-through; color: #f87171; }
         .clone-info { min-width: 0; flex: 1; font-family: monospace; }
         .clone-email { font-size: 0.71rem; font-weight: 700; color: #00ff41; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         body.light-theme .clone-email { color: #059669; }
@@ -565,7 +519,7 @@
             backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
             border: 1px solid rgba(0, 255, 65, 0.35);
             border-radius: 24px;
-            padding: 44px 22px 24px;
+            padding: 44px 22px 22px;
             width: 100%;
             text-align: center;
             box-shadow: 0 14px 36px rgba(0, 0, 0, 0.8), 0 0 22px rgba(0, 255, 65, 0.14);
@@ -594,7 +548,7 @@
 
         /* 3D Flip Avatar */
         .avatar-wrapper {
-            position: relative; display: inline-block; width: 114px; height: 114px;
+            position: relative; display: inline-block; width: 112px; height: 112px;
             margin-bottom: 10px; transform: translateZ(35px); perspective: 900px; cursor: pointer;
         }
         .avatar-flipper {
@@ -616,13 +570,13 @@
         }
         body.light-theme .status-dot { background: #10b981; border-color: #fff; }
 
-        .name { font-size: 1.58rem; font-weight: 700; margin-bottom: 4px; transform: translateZ(25px); }
-        .bio { font-size: 0.88rem; color: #00ff41; margin-bottom: 14px; font-family: monospace; min-height: 20px; transform: translateZ(25px); }
+        .name { font-size: 1.56rem; font-weight: 700; margin-bottom: 4px; transform: translateZ(25px); }
+        .bio { font-size: 0.88rem; color: #00ff41; margin-bottom: 12px; font-family: monospace; min-height: 20px; transform: translateZ(25px); }
         body.light-theme .bio { color: #059669; font-weight: 600; }
 
         .info-row {
-            display: flex; justify-content: center; align-items: center; gap: 9px;
-            font-size: 0.78rem; opacity: 0.92; margin-bottom: 15px;
+            display: flex; justify-content: center; align-items: center; gap: 8px;
+            font-size: 0.77rem; opacity: 0.92; margin-bottom: 12px;
             background: rgba(0, 255, 65, 0.08); border: 1px solid rgba(0, 255, 65, 0.2);
             padding: 7px 11px; border-radius: 20px; flex-wrap: wrap; transform: translateZ(20px);
         }
@@ -630,14 +584,43 @@
         .info-row i { color: #00ff41; }
         body.light-theme .info-row i { color: #059669; }
 
+        /* Thanh Thống Kê Truy Cập Thực Tế + Điểm Sao Nhanh */
+        .traffic-strip {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 7px;
+            margin-bottom: 14px;
+            transform: translateZ(22px);
+        }
+        .traffic-pill {
+            background: rgba(0, 0, 0, 0.42);
+            border: 1px solid rgba(0, 255, 65, 0.25);
+            border-radius: 13px;
+            padding: 7px 6px;
+            text-align: center;
+        }
+        body.light-theme .traffic-pill { background: rgba(240, 253, 244, 0.85); border-color: rgba(5, 150, 105, 0.25); }
+        .traffic-num {
+            font-size: 0.88rem;
+            font-weight: 800;
+            font-family: monospace;
+            color: #00ff41;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+        body.light-theme .traffic-num { color: #059669; }
+        .traffic-lbl { font-size: 0.64rem; opacity: 0.78; margin-top: 2px; }
+
         /* Advanced Music Player */
         .music-player-box {
             background: rgba(0, 0, 0, 0.45); border: 1px solid rgba(0, 255, 65, 0.25);
-            border-radius: 16px; padding: 12px; margin-bottom: 15px; transform: translateZ(25px);
+            border-radius: 16px; padding: 12px; margin-bottom: 14px; transform: translateZ(25px);
         }
         body.light-theme .music-player-box { background: rgba(255, 255, 255, 0.7); border-color: rgba(5, 150, 105, 0.25); }
 
-        #visualizer { width: 100%; height: 34px; margin-bottom: 7px; border-radius: 8px; display: block; }
+        #visualizer { width: 100%; height: 32px; margin-bottom: 7px; border-radius: 8px; display: block; }
         .track-info { font-size: 0.82rem; margin-bottom: 7px; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
         .progress-container { display: flex; align-items: center; gap: 7px; font-size: 0.7rem; margin-bottom: 9px; font-family: monospace; }
@@ -647,11 +630,11 @@
         body.light-theme input[type=range]::-webkit-slider-thumb { background: #059669; box-shadow: 0 0 8px #059669; }
 
         .music-controls { display: flex; justify-content: center; align-items: center; gap: 11px; }
-        .ctrl-btn { background: rgba(0, 255, 65, 0.1); border: 1px solid rgba(0, 255, 65, 0.3); color: inherit; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; transition: 0.2s; font-size: 0.82rem; }
+        .ctrl-btn { background: rgba(0, 255, 65, 0.1); border: 1px solid rgba(0, 255, 65, 0.3); color: inherit; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; transition: 0.2s; font-size: 0.82rem; }
         .ctrl-btn:hover, .ctrl-btn.active { background: rgba(0, 255, 65, 0.35); transform: scale(1.08); border-color: #00ff41; }
         body.light-theme .ctrl-btn:hover, body.light-theme .ctrl-btn.active { background: #059669; color: #fff; border-color: #059669; }
 
-        .play-btn { width: 46px; height: 46px; font-size: 1.05rem; background: linear-gradient(45deg, #00b09b, #00ff41); color: #000; box-shadow: 0 4px 14px rgba(0, 255, 65, 0.4); border: none; border-radius: 50%; cursor: pointer; transition: 0.25s; }
+        .play-btn { width: 44px; height: 44px; font-size: 1.05rem; background: linear-gradient(45deg, #00b09b, #00ff41); color: #000; box-shadow: 0 4px 14px rgba(0, 255, 65, 0.4); border: none; border-radius: 50%; cursor: pointer; transition: 0.25s; }
         .play-btn:hover { transform: scale(1.08); }
 
         .volume-box { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 9px; padding-top: 7px; border-top: 1px solid rgba(0, 255, 65, 0.15); }
@@ -659,19 +642,19 @@
         body.light-theme .volume-box i { color: #059669; }
         #volume-bar { max-width: 110px; }
 
-        .btn-group { display: flex; justify-content: center; gap: 9px; margin-bottom: 15px; transform: translateZ(20px); flex-wrap: wrap; }
+        .btn-group { display: flex; justify-content: center; gap: 9px; margin-bottom: 14px; transform: translateZ(20px); flex-wrap: wrap; }
         .action-btn { background: rgba(0, 255, 65, 0.1); color: inherit; border: 1px solid rgba(0, 255, 65, 0.3); padding: 8px 14px; border-radius: 30px; font-size: 0.8rem; font-weight: bold; cursor: pointer; transition: 0.25s; display: flex; align-items: center; gap: 6px; }
         body.light-theme .action-btn { background: rgba(5, 150, 105, 0.1); border-color: rgba(5, 150, 105, 0.3); }
         .action-btn:hover { background: rgba(0, 255, 65, 0.3); transform: translateY(-2px); }
         body.light-theme .action-btn:hover { background: #059669; color: #fff; }
 
-        /* System Monitor + FPS Uncap Controller */
+        /* System Monitor */
         .sys-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 8px;
             text-align: center;
-            margin-bottom: 15px;
+            margin-bottom: 14px;
             transform: translateZ(20px);
         }
         .sys-box {
@@ -688,12 +671,174 @@
         body.light-theme .sys-val { color: #059669; }
         .sys-lbl { font-size: 0.65rem; opacity: 0.78; margin-top: 2px; }
 
-        .social-links { display: flex; justify-content: center; gap: 11px; margin-bottom: 14px; transform: translateZ(20px); flex-wrap: wrap; }
-        .social-links a { color: inherit; font-size: 1.15rem; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; background: rgba(0, 255, 65, 0.08); border-radius: 50%; text-decoration: none; transition: 0.25s; border: 1px solid rgba(0, 255, 65, 0.25); }
+        .social-links { display: flex; justify-content: center; gap: 11px; margin-bottom: 12px; transform: translateZ(20px); flex-wrap: wrap; }
+        .social-links a { color: inherit; font-size: 1.15rem; width: 38px; height: 38px; display: flex; justify-content: center; align-items: center; background: rgba(0, 255, 65, 0.08); border-radius: 50%; text-decoration: none; transition: 0.25s; border: 1px solid rgba(0, 255, 65, 0.25); }
         .social-links a:hover { transform: translateY(-3px); background: #00ff41; color: #000; box-shadow: 0 5px 14px rgba(0,255,65,0.4); }
         body.light-theme .social-links a:hover { background: #059669; color: #fff; }
 
         .copyright { font-size: 0.72rem; opacity: 0.65; }
+
+        /* ================= WEB RATING & SCALE WIDGET (MỚI) ================= */
+        .rating-summary-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(0, 0, 0, 0.38);
+            border: 1px solid rgba(0, 255, 65, 0.24);
+            border-radius: 14px;
+            padding: 10px 12px;
+            margin-bottom: 10px;
+        }
+        body.light-theme .rating-summary-box { background: rgba(240, 253, 244, 0.85); border-color: rgba(5, 150, 105, 0.25); }
+
+        .rating-big-score {
+            text-align: center;
+            min-width: 72px;
+            padding-right: 10px;
+            border-right: 1px solid rgba(0, 255, 65, 0.22);
+        }
+        body.light-theme .rating-big-score { border-right-color: rgba(5, 150, 105, 0.22); }
+        .rating-score-val {
+            font-size: 1.65rem;
+            font-weight: 900;
+            font-family: monospace;
+            color: #facc15;
+            line-height: 1.1;
+            text-shadow: 0 0 10px rgba(250, 204, 21, 0.35);
+        }
+        body.light-theme .rating-score-val { color: #d97706; text-shadow: none; }
+        .rating-total-votes { font-size: 0.66rem; opacity: 0.8; margin-top: 3px; }
+
+        /* Thang đo 5 sao -> 1 sao */
+        .rating-scale-bars { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+        .scale-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.68rem;
+            font-family: monospace;
+        }
+        .scale-star-lbl { width: 24px; text-align: right; color: #facc15; font-weight: 700; }
+        body.light-theme .scale-star-lbl { color: #d97706; }
+        .scale-bar-bg {
+            flex: 1;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        body.light-theme .scale-bar-bg { background: rgba(5, 150, 105, 0.15); }
+        .scale-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #f59e0b, #facc15);
+            border-radius: 10px;
+            transition: width 0.4s ease;
+        }
+        .scale-count { width: 22px; text-align: right; opacity: 0.78; font-size: 0.65rem; }
+
+        /* Khu vực người dùng bấm chọn sao & lựa chọn đánh giá */
+        .user-rate-box {
+            background: rgba(0, 255, 65, 0.05);
+            border: 1px dashed rgba(0, 255, 65, 0.28);
+            border-radius: 13px;
+            padding: 10px;
+        }
+        body.light-theme .user-rate-box { background: rgba(5, 150, 105, 0.05); border-color: rgba(5, 150, 105, 0.28); }
+
+        .star-picker {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+        .star-btn {
+            background: transparent;
+            border: none;
+            font-size: 1.45rem;
+            color: rgba(255, 255, 255, 0.25);
+            cursor: pointer;
+            transition: transform 0.15s, color 0.15s;
+            padding: 2px;
+        }
+        body.light-theme .star-btn { color: rgba(30, 41, 59, 0.22); }
+        .star-btn.active, .star-btn:hover {
+            color: #facc15;
+            transform: scale(1.18);
+            text-shadow: 0 0 12px rgba(250, 204, 21, 0.55);
+        }
+        .star-meaning {
+            text-align: center;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #00ff41;
+            margin-bottom: 8px;
+            min-height: 16px;
+        }
+        body.light-theme .star-meaning { color: #059669; }
+
+        /* Các lựa chọn đánh giá nhanh (Tags) */
+        .rating-tags-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 8px;
+            justify-content: center;
+        }
+        .rate-tag {
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(0, 255, 65, 0.28);
+            color: inherit;
+            font-size: 0.68rem;
+            padding: 4px 8px;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: 0.18s;
+            user-select: none;
+        }
+        body.light-theme .rate-tag { background: #ffffff; border-color: rgba(5, 150, 105, 0.3); }
+        .rate-tag.selected {
+            background: #00ff41;
+            color: #000;
+            font-weight: 700;
+            border-color: #00ff41;
+        }
+        body.light-theme .rate-tag.selected { background: #059669; color: #fff; border-color: #059669; }
+
+        .rate-submit-row {
+            display: flex;
+            gap: 6px;
+        }
+        #rate-comment-input {
+            flex: 1;
+            min-width: 0;
+            background: rgba(0, 0, 0, 0.42);
+            border: 1px solid rgba(0, 255, 65, 0.3);
+            border-radius: 10px;
+            padding: 5px 9px;
+            color: inherit;
+            font-size: 0.73rem;
+            outline: none;
+        }
+        body.light-theme #rate-comment-input { background: #ffffff; border-color: rgba(5, 150, 105, 0.3); }
+
+        .recent-reviews-list {
+            margin-top: 8px;
+            max-height: 82px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .review-mini-item {
+            background: rgba(0, 0, 0, 0.32);
+            border-left: 2px solid #facc15;
+            border-radius: 6px;
+            padding: 4px 7px;
+            font-size: 0.68rem;
+        }
+        body.light-theme .review-mini-item { background: rgba(255, 255, 255, 0.85); }
 
         /* ================= RIGHT COLUMN WIDGETS ================= */
         .pomo-display {
@@ -722,8 +867,8 @@
         .pomo-tab.active { background: #00ff41; color: #000; font-weight: bold; }
         body.light-theme .pomo-tab.active { background: #059669; color: #fff; border-color: #059669; }
         .pomo-time {
-            font-size: 1.95rem; font-weight: 800; font-family: monospace; color: #00ff41;
-            letter-spacing: 2px; margin: 2px 0 7px;
+            font-size: 1.85rem; font-weight: 800; font-family: monospace; color: #00ff41;
+            letter-spacing: 2px; margin: 2px 0 6px;
         }
         body.light-theme .pomo-time { color: #059669; }
         .pomo-custom-row {
@@ -731,12 +876,12 @@
             justify-content: center;
             align-items: center;
             gap: 8px;
-            margin-bottom: 9px;
+            margin-bottom: 8px;
             font-size: 0.72rem;
         }
         .pomo-custom-row label { display: flex; align-items: center; gap: 4px; opacity: 0.9; }
         .pomo-num-input {
-            width: 48px;
+            width: 46px;
             background: rgba(0, 0, 0, 0.45);
             border: 1px solid rgba(0, 255, 65, 0.35);
             border-radius: 8px;
@@ -751,7 +896,7 @@
         body.light-theme .pomo-num-input { background: #ffffff; border-color: rgba(5, 150, 105, 0.35); }
         .pomo-actions { display: flex; justify-content: center; gap: 7px; flex-wrap: wrap; }
         .pomo-btn {
-            padding: 6px 14px; border-radius: 18px; border: 1px solid rgba(0, 255, 65, 0.4);
+            padding: 5px 13px; border-radius: 18px; border: 1px solid rgba(0, 255, 65, 0.4);
             background: rgba(0, 255, 65, 0.15); color: inherit; font-weight: bold;
             font-size: 0.75rem; cursor: pointer; transition: 0.2s;
         }
@@ -760,7 +905,7 @@
         .pomo-btn:hover { transform: scale(1.04); }
 
         .history-list {
-            height: 135px;
+            height: 112px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
@@ -787,7 +932,7 @@
         .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; text-align: center; font-size: 0.7rem; }
         .cal-day-name { font-weight: 700; opacity: 0.65; padding-bottom: 2px; }
         .cal-cell {
-            padding: 6px 0;
+            padding: 5px 0;
             border-radius: 7px;
             background: rgba(0, 0, 0, 0.25);
             cursor: pointer;
@@ -831,7 +976,7 @@
         body.light-theme .cal-note-title { color: #0284c7; }
         #cal-day-note-input {
             width: 100%;
-            height: 54px;
+            height: 48px;
             background: rgba(0, 0, 0, 0.4);
             border: 1px solid rgba(56, 189, 248, 0.35);
             border-radius: 9px;
@@ -845,7 +990,7 @@
 
         #quick-notes {
             width: 100%;
-            height: 76px;
+            height: 68px;
             background: rgba(0, 0, 0, 0.4);
             border: 1px solid rgba(0, 255, 65, 0.28);
             border-radius: 11px;
@@ -889,12 +1034,12 @@
     <div id="intro-gate">
         <div class="intro-card">
             <img src="logo.jpg" alt="ThanhDev Hub" class="intro-logo" onerror="this.src='https://ui-avatars.com/api/?name=ThanhDev+Hub&background=0a140e&color=00ff41&size=140'">
-            <div class="intro-badge"><i class="fas fa-shield-halved"></i> THANHDEV HUB • OS v3.0</div>
+            <div class="intro-badge"><i class="fas fa-shield-halved"></i> THANHDEV HUB • OS v3.2</div>
             <h1 class="intro-title">Nguyễn Trung Thành</h1>
 
             <!-- Giai đoạn 1: Đang tải hệ thống -->
             <div id="loading-stage">
-                <p class="intro-subtitle" style="margin-bottom: 14px;">Đang khởi tạo không gian làm việc, đồng bộ dữ liệu và tối ưu giao diện thiết bị...</p>
+                <p class="intro-subtitle" style="margin-bottom: 14px;">Đang khởi tạo không gian làm việc, đồng bộ lượt truy cập thật và dữ liệu đánh giá...</p>
                 <div class="loader-bar-wrap">
                     <div class="loader-bar-fill" id="loader-fill"></div>
                 </div>
@@ -907,14 +1052,14 @@
             <!-- Giai đoạn 2: Giới thiệu Bio & Nút bắt đầu -->
             <div id="welcome-stage">
                 <p class="intro-subtitle">
-                    Chào mừng bạn đến với <strong>ThanhDev Hub</strong> — trang Bio &amp; Dashboard cá nhân tích hợp bộ công cụ lập trình, học tập và quản lý tiện ích đa thiết bị.
+                    Chào mừng bạn đến với <strong>ThanhDev Hub</strong> — trang Bio &amp; Dashboard cá nhân tích hợp bộ công cụ lập trình, học tập, thống kê truy cập thật và hệ thống đánh giá người dùng đa thiết bị.
                 </p>
 
                 <div class="intro-features">
                     <div class="intro-feat-item"><i class="fas fa-terminal"></i> <span>Terminal OS &amp; Dev Tools</span></div>
-                    <div class="intro-feat-item"><i class="fas fa-music"></i> <span>Music Visualizer Pro</span></div>
+                    <div class="intro-feat-item"><i class="fas fa-star"></i> <span>Đánh Giá Web &amp; Thang Sao</span></div>
                     <div class="intro-feat-item"><i class="fas fa-stopwatch"></i> <span>Pomodoro &amp; Lịch Ghi Chú</span></div>
-                    <div class="intro-feat-item"><i class="fas fa-cloud"></i> <span>Cloud Sync Đa Thiết Bị</span></div>
+                    <div class="intro-feat-item"><i class="fas fa-chart-line"></i> <span>Đếm Truy Cập Đa Thiết Bị</span></div>
                 </div>
 
                 <button class="enter-hub-btn" id="enter-hub-btn" onclick="enterDashboard()">
@@ -945,25 +1090,25 @@
                 </div>
             </div>
 
-            <!-- 2. ThanhDev Terminal v3.0 -->
+            <!-- 2. ThanhDev Terminal v3.2 -->
             <div class="glass-panel">
                 <div class="panel-header">
                     <span><i class="fas fa-terminal"></i> ThanhDev Terminal</span>
-                    <span style="font-size: 0.69rem; opacity: 0.8;">OS v3.0 PRO</span>
+                    <span style="font-size: 0.69rem; opacity: 0.8;">OS v3.2 PRO</span>
                 </div>
                 <div class="terminal-box" onclick="document.getElementById('cli-input').focus()">
                     <div class="terminal-output" id="cli-output">
-                        <div>Welcome to <strong>ThanhDev Hub OS v3.0</strong>!</div>
-                        <div>Gõ <span style="color:#fff;">help</span> hoặc <span style="color:#fff;">readme</span> để xem toàn bộ công cụ.</div>
+                        <div>Welcome to <strong>ThanhDev Hub OS v3.2</strong>!</div>
+                        <div>Gõ <span style="color:#fff;">help</span> hoặc <span style="color:#fff;">stats</span> để xem thống kê truy cập.</div>
                     </div>
                     <div class="terminal-input-row">
                         <span>thanhdev:~$</span>
-                        <input type="text" id="cli-input" placeholder="help, readme, calc 2^10, ip, hash..." autocomplete="off">
+                        <input type="text" id="cli-input" placeholder="help, stats, calc 2^10, ip, hash..." autocomplete="off">
                     </div>
                 </div>
                 <div class="cli-chips">
                     <button class="cli-chip" onclick="runCliCommand('help')">help</button>
-                    <button class="cli-chip" onclick="runCliCommand('readme')">readme</button>
+                    <button class="cli-chip" onclick="runCliCommand('stats')">stats</button>
                     <button class="cli-chip" onclick="runCliCommand('ip')">ip</button>
                     <button class="cli-chip" onclick="runCliCommand('sysinfo')">sysinfo</button>
                     <button class="cli-chip" onclick="runCliCommand('fps max')">fps max</button>
@@ -1009,6 +1154,15 @@
                     </div>
                 </div>
             </div>
+
+            <!-- 4. Ghi Chú Nhanh Chung (Đặt bên trái để cân chiều cao với cột phải) -->
+            <div class="glass-panel">
+                <div class="panel-header">
+                    <span><i class="fas fa-sticky-note"></i> Ghi Chú Nhanh</span>
+                    <span id="note-saved-status" style="font-size: 0.68rem; opacity: 0.78;"><i class="fas fa-check-circle"></i> Tự động lưu</span>
+                </div>
+                <textarea id="quick-notes" placeholder="Ghi nhanh ý tưởng code, to-do list tại đây..."></textarea>
+            </div>
         </aside>
 
         <!-- ==================== KHUNG GIỮA: PROFILE CARD 3D ==================== -->
@@ -1044,6 +1198,22 @@
                         <div><i id="weather-icon" class="fas fa-cloud-sun"></i> <span id="weather-temp">--°C</span></div>
                         <span>|</span>
                         <div class="clock-container"><i class="fas fa-clock"></i> <span id="clock">00:00:00</span></div>
+                    </div>
+
+                    <!-- THỐNG KÊ TRUY CẬP THẬT ĐA THIẾT BỊ & ĐIỂM ĐÁNH GIÁ -->
+                    <div class="traffic-strip">
+                        <div class="traffic-pill" title="Tổng số lượt truy cập thật từ tất cả các thiết bị">
+                            <div class="traffic-num"><i class="fas fa-globe-asia"></i> <span id="global-visits-val">...</span></div>
+                            <div class="traffic-lbl">Tổng vào Web</div>
+                        </div>
+                        <div class="traffic-pill" title="Số lần thiết bị hiện tại của bạn đã mở web">
+                            <div class="traffic-num"><i class="fas fa-mobile-screen"></i> <span id="device-visits-val">1</span></div>
+                            <div class="traffic-lbl">Thiết bị này</div>
+                        </div>
+                        <div class="traffic-pill" title="Điểm đánh giá trung bình từ người dùng">
+                            <div class="traffic-num" style="color:#facc15;"><i class="fas fa-star"></i> <span id="hero-avg-rating">5.0</span></div>
+                            <div class="traffic-lbl" id="hero-votes-lbl">Đánh giá</div>
+                        </div>
                     </div>
 
                     <!-- TRÌNH PHÁT NHẠC NÂNG CAO -->
@@ -1112,7 +1282,59 @@
 
         <!-- ==================== KHUNG PHẢI ==================== -->
         <aside class="side-column" id="right-column">
-            <!-- 1. Pomodoro Focus -->
+            <!-- 1. ĐÁNH GIÁ WEB & THANG ĐO SAO (MỚI) -->
+            <div class="glass-panel">
+                <div class="panel-header">
+                    <span><i class="fas fa-star" style="color:#facc15;"></i> Đánh Giá Web &amp; Thang Đo</span>
+                    <span id="rating-sync-badge" style="font-size:0.66rem; opacity:0.85;">Live Sync</span>
+                </div>
+
+                <!-- Bảng tổng hợp & Thang đo 5★ -> 1★ -->
+                <div class="rating-summary-box">
+                    <div class="rating-big-score">
+                        <div class="rating-score-val" id="avg-rating-display">5.0</div>
+                        <div style="color:#facc15; font-size:0.68rem; margin-top:2px;">★★★★★</div>
+                        <div class="rating-total-votes" id="total-votes-display">0 lượt</div>
+                    </div>
+                    <div class="rating-scale-bars" id="rating-scale-bars">
+                        <!-- Render tự động 5 sao -> 1 sao -->
+                    </div>
+                </div>
+
+                <!-- Khu vực người dùng bình chọn sao & lựa chọn -->
+                <div class="user-rate-box">
+                    <div class="star-picker" id="star-picker">
+                        <button class="star-btn active" data-star="1" onclick="selectStar(1)"><i class="fas fa-star"></i></button>
+                        <button class="star-btn active" data-star="2" onclick="selectStar(2)"><i class="fas fa-star"></i></button>
+                        <button class="star-btn active" data-star="3" onclick="selectStar(3)"><i class="fas fa-star"></i></button>
+                        <button class="star-btn active" data-star="4" onclick="selectStar(4)"><i class="fas fa-star"></i></button>
+                        <button class="star-btn active" data-star="5" onclick="selectStar(5)"><i class="fas fa-star"></i></button>
+                    </div>
+                    <div class="star-meaning" id="star-meaning-label">5★ — Xuất sắc / Quá đỉnh!</div>
+
+                    <!-- Các lựa chọn đánh giá nhanh -->
+                    <div class="rating-tags-wrap" id="rating-tags-wrap">
+                        <span class="rate-tag" onclick="toggleRateTag(this)">Giao diện đẹp</span>
+                        <span class="rate-tag" onclick="toggleRateTag(this)">Mượt &amp; Nhanh</span>
+                        <span class="rate-tag" onclick="toggleRateTag(this)">Công cụ hữu ích</span>
+                        <span class="rate-tag" onclick="toggleRateTag(this)">Nhạc hay</span>
+                        <span class="rate-tag" onclick="toggleRateTag(this)">Sáng tạo</span>
+                        <span class="rate-tag" onclick="toggleRateTag(this)">Tối ưu Mobile</span>
+                    </div>
+
+                    <div class="rate-submit-row">
+                        <input type="text" id="rate-comment-input" maxlength="80" placeholder="Nhận xét ngắn (không bắt buộc)...">
+                        <button class="mini-btn" onclick="submitWebRating()" style="background:#00ff41; color:#000; font-weight:800;">
+                            <i class="fas fa-paper-plane"></i> Gửi
+                        </button>
+                    </div>
+
+                    <!-- Danh sách đánh giá gần nhất của người dùng -->
+                    <div class="recent-reviews-list" id="recent-reviews-list"></div>
+                </div>
+            </div>
+
+            <!-- 2. Pomodoro Focus -->
             <div class="glass-panel">
                 <div class="panel-header">
                     <span><i class="fas fa-stopwatch"></i> Pomodoro Focus</span>
@@ -1146,7 +1368,7 @@
                 </div>
             </div>
 
-            <!-- 2. Lịch Sử Truy Cập Cập Nhật Liên Tục -->
+            <!-- 3. Lịch Sử Truy Cập Cập Nhật Liên Tục -->
             <div class="glass-panel">
                 <div class="panel-header">
                     <span><i class="fas fa-history"></i> Lịch Sử Truy Cập <span style="font-size:0.65rem; opacity:0.8;">● LIVE</span></span>
@@ -1155,10 +1377,10 @@
                 <div class="history-list" id="access-history-list"></div>
             </div>
 
-            <!-- 3. Lịch Tháng Tương Tác & Ghi Chú Theo Ngày -->
+            <!-- 4. Lịch Tháng Tương Tác & Ghi Chú Theo Ngày -->
             <div class="glass-panel">
                 <div class="panel-header">
-                    <span><i class="fas fa-calendar-alt"></i> Lịch & Sự Kiện</span>
+                    <span><i class="fas fa-calendar-alt"></i> Lịch &amp; Sự Kiện</span>
                     <span id="cal-today-str" style="font-size: 0.7rem;"></span>
                 </div>
                 <div class="cal-header">
@@ -1175,15 +1397,6 @@
                     </div>
                     <textarea id="cal-day-note-input" placeholder="Bấm vào ngày bất kỳ trên lịch để ghi lịch học, deadline..."></textarea>
                 </div>
-            </div>
-
-            <!-- 4. Ghi Chú Nhanh Chung -->
-            <div class="glass-panel">
-                <div class="panel-header">
-                    <span><i class="fas fa-sticky-note"></i> Ghi Chú Nhanh</span>
-                    <span id="note-saved-status" style="font-size: 0.68rem; opacity: 0.78;"><i class="fas fa-check-circle"></i> Tự động lưu</span>
-                </div>
-                <textarea id="quick-notes" placeholder="Ghi nhanh ý tưởng code, to-do list tại đây..."></textarea>
             </div>
         </aside>
 
@@ -1235,15 +1448,15 @@
             const pctText = document.getElementById('loader-percent');
             const statusText = document.getElementById('loader-text');
             const steps = [
-                { p: 20, msg: 'Loading Matrix Engine...' },
-                { p: 48, msg: 'Connecting GitHub & Weather API...' },
-                { p: 76, msg: 'Syncing Cloud Workspace...' },
+                { p: 25, msg: 'Loading Matrix Engine...' },
+                { p: 55, msg: 'Recording Real Visit Counter...' },
+                { p: 82, msg: 'Syncing Web Ratings & Cloud Data...' },
                 { p: 100, msg: 'System Ready!' }
             ];
 
             let progress = 0;
             const timer = setInterval(() => {
-                progress += Math.floor(Math.random() * 8) + 5;
+                progress += Math.floor(Math.random() * 9) + 6;
                 if (progress >= 100) {
                     progress = 100;
                     clearInterval(timer);
@@ -1255,7 +1468,7 @@
                         document.getElementById('loading-stage').style.display = 'none';
                         document.getElementById('welcome-stage').style.display = 'block';
                         isIntroReady = true;
-                    }, 300);
+                    }, 280);
                     return;
                 }
 
@@ -1263,7 +1476,7 @@
                 pctText.innerText = progress + '%';
                 const currentStep = steps.find(s => progress <= s.p);
                 if (currentStep) statusText.innerText = currentStep.msg;
-            }, 65);
+            }, 60);
         }
 
         function enterDashboard() {
@@ -1272,7 +1485,6 @@
             document.body.classList.remove('gate-locked');
             document.getElementById('main-dashboard').classList.add('entered');
 
-            // Khởi tạo AudioContext ngay khi người dùng bấm nút Bắt đầu để tránh bị trình duyệt chặn âm thanh
             if (!isAudioInit) initAudioAPI();
             if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
             trackUserAction('Bắt đầu truy cập ThanhDev Hub', '#enter');
@@ -1295,6 +1507,190 @@
         });
 
         runPreloader();
+
+        /* ================= GLOBAL CLOUD STATE: LƯỢT TRUY CẬP THẬT & ĐÁNH GIÁ WEB ================= */
+        // Dùng kho JSON đồng bộ chung để lưu tổng lượt truy cập thật từ mọi thiết bị + bảng đánh giá sao
+        const HUB_METRICS_URL = 'https://api.npoint.io/9c4a1e8f2d7b5a3c6e01';
+        const LOCAL_METRICS_KEY = 'thanhdev_hub_metrics_v2';
+        const DEVICE_VISITS_KEY = 'thanhdev_device_visit_count';
+        const SESSION_COUNTED_KEY = 'thanhdev_session_visit_counted';
+
+        let hubMetrics = {
+            totalVisits: 0,
+            ratings: { "5": 0, "4": 0, "3": 0, "2": 0, "1": 0 },
+            reviews: []
+        };
+
+        function getDeviceVisits() {
+            let count = parseInt(localStorage.getItem(DEVICE_VISITS_KEY) || '0', 10);
+            if (!sessionStorage.getItem(SESSION_COUNTED_KEY)) {
+                count += 1;
+                localStorage.setItem(DEVICE_VISITS_KEY, count.toString());
+            }
+            return count;
+        }
+
+        function renderTrafficAndRatings() {
+            // 1. Cập nhật số lượt truy cập
+            const devCount = parseInt(localStorage.getItem(DEVICE_VISITS_KEY) || '1', 10);
+            document.getElementById('device-visits-val').innerText = devCount.toLocaleString('vi-VN');
+            document.getElementById('global-visits-val').innerText = Math.max(hubMetrics.totalVisits, devCount).toLocaleString('vi-VN');
+
+            // 2. Tính toán điểm trung bình & thang đo sao
+            const r = hubMetrics.ratings || { "5": 0, "4": 0, "3": 0, "2": 0, "1": 0 };
+            const totalVotes = (r["5"] || 0) + (r["4"] || 0) + (r["3"] || 0) + (r["2"] || 0) + (r["1"] || 0);
+            const weightedSum = 5 * (r["5"] || 0) + 4 * (r["4"] || 0) + 3 * (r["3"] || 0) + 2 * (r["2"] || 0) + 1 * (r["1"] || 0);
+            const avgScore = totalVotes > 0 ? (weightedSum / totalVotes).toFixed(1) : "5.0";
+
+            document.getElementById('avg-rating-display').innerText = avgScore;
+            document.getElementById('hero-avg-rating').innerText = avgScore;
+            document.getElementById('total-votes-display').innerText = `${totalVotes} đánh giá`;
+            document.getElementById('hero-votes-lbl').innerText = `${totalVotes} đánh giá`;
+
+            // Render thang đo 5★ -> 1★
+            const scaleContainer = document.getElementById('rating-scale-bars');
+            let scaleHtml = '';
+            for (let s = 5; s >= 1; s--) {
+                const cnt = r[String(s)] || 0;
+                const pct = totalVotes > 0 ? Math.round((cnt / totalVotes) * 100) : 0;
+                scaleHtml += `
+                    <div class="scale-row">
+                        <span class="scale-star-lbl">${s}★</span>
+                        <div class="scale-bar-bg">
+                            <div class="scale-bar-fill" style="width: ${pct}%;"></div>
+                        </div>
+                        <span class="scale-count">${cnt}</span>
+                    </div>
+                `;
+            }
+            scaleContainer.innerHTML = scaleHtml;
+
+            // Render danh sách nhận xét gần nhất
+            const revList = document.getElementById('recent-reviews-list');
+            const reviews = Array.isArray(hubMetrics.reviews) ? hubMetrics.reviews : [];
+            if (reviews.length === 0) {
+                revList.innerHTML = `<div style="font-size:0.68rem; opacity:0.65; text-align:center; padding:4px;">Hãy là người đầu tiên để lại đánh giá!</div>`;
+            } else {
+                revList.innerHTML = reviews.slice(0, 12).map(rv => {
+                    const starsText = '★'.repeat(rv.stars || 5);
+                    const tagsStr = (rv.tags && rv.tags.length > 0) ? ` [${rv.tags.join(', ')}]` : '';
+                    const msgStr = rv.comment ? ` — "${rv.comment}"` : '';
+                    return `
+                        <div class="review-mini-item">
+                            <span style="color:#facc15; font-weight:bold;">${starsText}</span>
+                            <span style="opacity:0.8;">(${rv.device || 'User'} • ${rv.time || ''})</span>
+                            <span style="color:#00ff41;">${tagsStr}</span>${msgStr}
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        async function syncHubMetrics(incrementVisit = false) {
+            const badge = document.getElementById('rating-sync-badge');
+            const cached = JSON.parse(localStorage.getItem(LOCAL_METRICS_KEY) || 'null');
+            if (cached) {
+                hubMetrics = cached;
+                renderTrafficAndRatings();
+            }
+
+            try {
+                const res = await fetch(HUB_METRICS_URL, { cache: 'no-store' });
+                if (res.ok) {
+                    const remote = await res.json();
+                    if (remote && typeof remote.totalVisits === 'number') {
+                        hubMetrics = {
+                            totalVisits: remote.totalVisits,
+                            ratings: remote.ratings || { "5": 0, "4": 0, "3": 0, "2": 0, "1": 0 },
+                            reviews: Array.isArray(remote.reviews) ? remote.reviews : []
+                        };
+                    }
+                }
+            } catch (e) {}
+
+            // Nếu là lượt mở trang mới thật sự trong phiên này -> tăng +1 tổng lượt truy cập toàn cầu
+            if (incrementVisit && !sessionStorage.getItem(SESSION_COUNTED_KEY)) {
+                sessionStorage.setItem(SESSION_COUNTED_KEY, '1');
+                hubMetrics.totalVisits = (hubMetrics.totalVisits || 0) + 1;
+                await saveHubMetricsToCloud();
+            } else {
+                localStorage.setItem(LOCAL_METRICS_KEY, JSON.stringify(hubMetrics));
+                renderTrafficAndRatings();
+            }
+            if (badge) badge.innerText = 'Live Sync ✓';
+        }
+
+        async function saveHubMetricsToCloud() {
+            localStorage.setItem(LOCAL_METRICS_KEY, JSON.stringify(hubMetrics));
+            renderTrafficAndRatings();
+            try {
+                await fetch(HUB_METRICS_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(hubMetrics)
+                });
+            } catch (e) {}
+        }
+
+        // Khởi tạo đếm truy cập ngay khi mở web
+        getDeviceVisits();
+        syncHubMetrics(true);
+        setInterval(() => syncHubMetrics(false), 12000);
+
+        /* ================= CHỌN SAO & GỬI ĐÁNH GIÁ WEB ================= */
+        let selectedStarCount = 5;
+        const starMeanings = {
+            1: "1★ — Cần cải thiện nhiều",
+            2: "2★ — Tạm ổn",
+            3: "3★ — Khá tốt",
+            4: "4★ — Rất tốt & Tiện lợi!",
+            5: "5★ — Xuất sắc / Quá đỉnh!"
+        };
+
+        function selectStar(n) {
+            selectedStarCount = n;
+            document.querySelectorAll('#star-picker .star-btn').forEach(btn => {
+                const s = parseInt(btn.getAttribute('data-star'), 10);
+                btn.classList.toggle('active', s <= n);
+            });
+            document.getElementById('star-meaning-label').innerText = starMeanings[n] || '';
+        }
+
+        function toggleRateTag(el) {
+            el.classList.toggle('selected');
+        }
+
+        async function submitWebRating() {
+            const commentInput = document.getElementById('rate-comment-input');
+            const comment = commentInput.value.trim();
+            const chosenTags = Array.from(document.querySelectorAll('#rating-tags-wrap .rate-tag.selected'))
+                .map(el => el.innerText.trim());
+
+            const key = String(selectedStarCount);
+            if (!hubMetrics.ratings) hubMetrics.ratings = { "5": 0, "4": 0, "3": 0, "2": 0, "1": 0 };
+            hubMetrics.ratings[key] = (hubMetrics.ratings[key] || 0) + 1;
+
+            if (!Array.isArray(hubMetrics.reviews)) hubMetrics.reviews = [];
+            const now = new Date();
+            const timeStr = `${now.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })} ${now.toLocaleDateString('vi-VN')}`;
+
+            hubMetrics.reviews.unshift({
+                stars: selectedStarCount,
+                tags: chosenTags,
+                comment: comment,
+                device: getDeviceLabel(),
+                time: timeStr
+            });
+            if (hubMetrics.reviews.length > 30) hubMetrics.reviews.pop();
+
+            // Reset form nhập
+            commentInput.value = '';
+            document.querySelectorAll('#rating-tags-wrap .rate-tag.selected').forEach(el => el.classList.remove('selected'));
+
+            await saveHubMetricsToCloud();
+            showToast(`Cảm ơn bạn đã đánh giá ${selectedStarCount}★ cho ThanhDev Hub!`);
+            trackUserAction(`Đánh giá web ${selectedStarCount}★`, '#rating');
+        }
 
         /* ================= 0. TỰ ĐỘNG LẬT AVATAR & LOGO.JPG ================= */
         const avatarFlipBox = document.getElementById('avatar-flip-box');
@@ -1388,7 +1784,7 @@
         }
         requestAnimationFrame(drawMatrix);
 
-        /* ================= 2. HIỆU ỨNG TILT 3D MƯỢT (CHỈ TRÊN DESKTOP CÓ CHUỘT) ================= */
+        /* ================= 2. HIỆU ỨNG TILT 3D MƯỢT ================= */
         if (window.matchMedia("(pointer: fine)").matches) {
             const container = document.getElementById('tilt-container');
             const card = document.getElementById('profile-card');
@@ -1752,9 +2148,13 @@
                 sharedClonePool = JSON.parse(e.newValue);
                 renderCloneGmailList();
             }
+            if (e.key === LOCAL_METRICS_KEY && e.newValue) {
+                hubMetrics = JSON.parse(e.newValue);
+                renderTrafficAndRatings();
+            }
         });
 
-        /* ================= 7. THANHDEV TERMINAL v3.0 ================= */
+        /* ================= 7. THANHDEV TERMINAL v3.2 ================= */
         const cliInput = document.getElementById('cli-input');
         const cliOutput = document.getElementById('cli-output');
         let cliHistory = [];
@@ -1809,19 +2209,20 @@
             switch (cmd) {
                 case 'help':
                     printCli(`<div class="cli-card">
-                        <b>Lệnh hệ thống:</b> <code>readme</code>, <code>sysinfo</code>, <code>fps &lt;60|120|144|max&gt;</code>, <code>matrix</code>, <code>theme</code>, <code>clear</code><br>
-                        <b>Lệnh Dev & Mạng:</b> <code>ip</code>, <code>calc &lt;phép tính&gt;</code>, <code>base64 &lt;text&gt;</code>, <code>hash &lt;text&gt;</code>, <code>web</code>, <code>sync</code><br>
-                        <b>Lệnh Năng suất:</b> <code>pomo &lt;phút&gt;</code>, <code>note &lt;nội dung&gt;</code>, <code>contact</code>
+                        <b>Hệ thống:</b> <code>stats</code>, <code>sysinfo</code>, <code>fps &lt;60|120|144|max&gt;</code>, <code>matrix</code>, <code>theme</code>, <code>clear</code><br>
+                        <b>Dev & Mạng:</b> <code>ip</code>, <code>calc &lt;phép tính&gt;</code>, <code>base64 &lt;text&gt;</code>, <code>hash &lt;text&gt;</code>, <code>web</code>, <code>sync</code><br>
+                        <b>Năng suất:</b> <code>pomo &lt;phút&gt;</code>, <code>note &lt;nội dung&gt;</code>, <code>contact</code>
                     </div>`);
                     break;
 
-                case 'readme':
+                case 'stats':
+                    const devV = localStorage.getItem(DEVICE_VISITS_KEY) || '1';
+                    const avgR = document.getElementById('avg-rating-display').innerText;
                     printCli(`<div class="cli-card">
-                        <b>📖 HƯỚNG DẪN NHANH THANHDEV HUB v3.0:</b><br>
-                        - <b>Mail Clone Sync:</b> Bấm Mail/Cả 2 hoặc tick ✓ để đánh dấu <i>ĐÃ DÙNG</i> đồng bộ trên mọi thiết bị.<br>
-                        - <b>Vượt FPS:</b> Bấm vào ô FPS ở thẻ giữa hoặc gõ <code>fps max</code> để mở khóa 120/144/Uncapped FPS.<br>
-                        - <b>Lịch & Ghi chú:</b> Bấm vào ngày bất kỳ trên lịch để lưu deadline riêng cho ngày đó.<br>
-                        - <b>Pomodoro:</b> Nhập số phút tự do, chuông báo thức sẽ reo 3 hồi to & kéo dài.
+                        <b>📊 THỐNG KÊ REAL-TIME:</b><br>
+                        - Tổng vào Web (All Devices): <b>${hubMetrics.totalVisits}</b> lượt<br>
+                        - Thiết bị hiện tại: <b>${devV}</b> lượt<br>
+                        - Điểm đánh giá Web: <b>${avgR} ★</b>
                     </div>`);
                     break;
 
@@ -1896,9 +2297,9 @@
                     break;
 
                 case 'sync':
-                    printCli(`Đang đồng bộ danh sách Gmail Clone đa thiết bị...`);
-                    await pullSharedClonePool();
-                    printCli(`Hoàn tất đồng bộ!`);
+                    printCli(`Đang đồng bộ Cloud Metrics & Gmail Pool...`);
+                    await Promise.all([pullSharedClonePool(), syncHubMetrics(false)]);
+                    printCli(`Hoàn tất đồng bộ toàn bộ dữ liệu!`);
                     break;
 
                 case 'web':
@@ -1978,7 +2379,7 @@
                 canvasVis = document.getElementById('visualizer');
                 ctxVis = canvasVis.getContext('2d');
                 canvasVis.width = canvasVis.offsetWidth || 320;
-                canvasVis.height = canvasVis.offsetHeight || 34;
+                canvasVis.height = canvasVis.offsetHeight || 32;
 
                 function drawVis() {
                     requestAnimationFrame(drawVis);
@@ -2220,7 +2621,7 @@
         function resetPomodoro() { stopAlarmBell(); setPomoMode(pomoMode); }
         document.getElementById('pomo-timer').innerText = formatPomo(pomoSeconds);
 
-        /* ================= 11. LỊCH SỬ TRUY CẬP CẬP NHẬT LIÊN TỤC TOÀN TRANG ================= */
+        /* ================= 11. LỊCH SỬ TRUY CẬP CẬP NHẬT LIÊN TỤC ================= */
         let accessHistory = JSON.parse(localStorage.getItem('thanhdev_access_history') || '[]');
 
         function trackUserAction(title, url = '') {
